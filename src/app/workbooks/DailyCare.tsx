@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Check, Heart } from 'lucide-react';
 import { dailyCareCategories } from '../data/daily-care';
 import { clsx } from 'clsx';
+import { Layout } from '../components/Layout';
 
 interface DailyCareProps {
   onBack: () => void;
@@ -25,28 +26,36 @@ export const DailyCare: React.FC<DailyCareProps> = ({ onBack }) => {
   };
 
   const getThemeColor = (theme: string, isSelected: boolean) => {
+    // Clay Theme Mapping
     switch (theme) {
-      case 'rose': return isSelected ? 'bg-rose-100 text-rose-800 border-rose-200' : 'hover:bg-rose-50 text-stone-600';
-      case 'emerald': return isSelected ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'hover:bg-emerald-50 text-stone-600';
-      case 'indigo': return isSelected ? 'bg-indigo-100 text-indigo-800 border-indigo-200' : 'hover:bg-indigo-50 text-stone-600';
+      case 'rose': 
+        return isSelected 
+          ? 'bg-[#EFA896]/20 border-[#EFA896]/50 text-[#5C3A3A] shadow-none' 
+          : 'hover:bg-[#FFF5F5] text-[#8A6A60]';
+      case 'emerald': 
+        return isSelected 
+          ? 'bg-[#E6F4EA]/60 border-[#4ADE80]/40 text-[#14532D] shadow-none' 
+          : 'hover:bg-[#F0FDF4] text-[#8A6A60]';
+      case 'indigo': 
+        return isSelected 
+          ? 'bg-[#EEF2FF]/60 border-[#818CF8]/40 text-[#1E3A8A] shadow-none' 
+          : 'hover:bg-[#F8FAFC] text-[#8A6A60]';
       default: return '';
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] text-stone-800 font-sans selection:bg-stone-200">
-      <div className="max-w-5xl mx-auto px-6 py-12 md:py-20">
-        
+    <Layout>
         {/* Navigation */}
         <div className="mb-8">
            <button 
              onClick={onBack}
-             className="flex items-center gap-2 text-stone-400 hover:text-stone-600 transition-colors group"
+             className="flex items-center gap-3 text-[#9C7A70] hover:text-[#5C3A3A] transition-colors group"
            >
-             <div className="p-2 rounded-full bg-stone-100 group-hover:bg-stone-200 transition-colors">
+             <div className="p-3 rounded-full bg-[#EEE6E1] shadow-[4px_4px_8px_rgba(166,133,119,0.1),-4px_-4px_8px_#FFFFFF] group-hover:shadow-[inset_2px_2px_4px_rgba(166,133,119,0.1),inset_-2px_-2px_4px_#FFFFFF] transition-all">
                <ArrowLeft size={20} />
              </div>
-             <span className="font-medium">Back to Dashboard</span>
+             <span className="font-bold tracking-wide uppercase text-xs">Back to Dashboard</span>
            </button>
         </div>
 
@@ -57,10 +66,10 @@ export const DailyCare: React.FC<DailyCareProps> = ({ onBack }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-stone-800 mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-[#5C3A3A] mb-8">
               Daily Care, Not Control
             </h1>
-            <div className="inline-block px-6 py-3 rounded-full bg-stone-100 text-stone-600 font-medium text-lg">
+            <div className="inline-block px-8 py-4 rounded-full bg-[#F3EBE6] text-[#9C7A70] font-bold text-lg shadow-[inset_3px_3px_6px_rgba(166,133,119,0.1),inset_-3px_-3px_6px_#FFFFFF]">
               You only need one.
             </div>
           </motion.div>
@@ -76,11 +85,11 @@ export const DailyCare: React.FC<DailyCareProps> = ({ onBack }) => {
               transition={{ delay: colIndex * 0.1 }}
               className="flex flex-col"
             >
-              <h2 className="text-2xl font-bold text-stone-400 mb-6 text-center md:text-left">
+              <h2 className="text-xl font-bold text-[#BFA69C] uppercase tracking-widest mb-6 text-center md:text-left pl-2">
                 {category.title}
               </h2>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {category.options.map((option, idx) => {
                   const isSelected = selection?.categoryId === category.id && selection?.optionIndex === idx;
                   const isDimmed = selection !== null && !isSelected;
@@ -94,20 +103,20 @@ export const DailyCare: React.FC<DailyCareProps> = ({ onBack }) => {
                         scale: isSelected ? 1.02 : 1 
                       }}
                       className={clsx(
-                        "w-full text-left p-4 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden group",
+                        "w-full text-left p-5 rounded-[1.5rem] border transition-all duration-300 relative overflow-hidden group",
                         isSelected 
                           ? getThemeColor(category.theme, true) 
-                          : `bg-white border-stone-100 ${getThemeColor(category.theme, false)}`
+                          : `bg-[#FDF9F7] border-white/60 shadow-[4px_4px_10px_rgba(166,133,119,0.05),-4px_-4px_10px_#FFFFFF] ${getThemeColor(category.theme, false)} hover:translate-y-[-2px]`
                       )}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <div className={clsx(
                           "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors flex-shrink-0",
-                          isSelected ? "border-current bg-white/50" : "border-stone-200 group-hover:border-stone-300"
+                          isSelected ? "border-transparent bg-white/60" : "border-[#EBE0DA] group-hover:border-[#D6CFC7]"
                         )}>
-                          {isSelected && <Check size={14} strokeWidth={3} />}
+                          {isSelected && <Check size={14} strokeWidth={4} className="text-[#5C3A3A]" />}
                         </div>
-                        <span className="font-medium text-lg leading-snug">{option}</span>
+                        <span className="font-bold text-lg leading-snug">{option}</span>
                       </div>
                     </motion.button>
                   );
@@ -124,17 +133,15 @@ export const DailyCare: React.FC<DailyCareProps> = ({ onBack }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="fixed bottom-8 left-0 right-0 flex justify-center pointer-events-none"
+              className="fixed bottom-10 left-0 right-0 flex justify-center pointer-events-none z-50"
             >
-              <div className="bg-white/90 backdrop-blur-md border border-stone-200 shadow-xl px-8 py-4 rounded-full flex items-center gap-3 text-stone-800 font-medium text-lg">
-                <Heart className="text-rose-400 fill-rose-400" size={20} />
+              <div className="bg-[#F9F3EF]/90 backdrop-blur-xl border border-white/60 shadow-[0_10px_40px_rgba(0,0,0,0.1)] px-8 py-4 rounded-full flex items-center gap-3 text-[#5C3A3A] font-bold text-lg">
+                <Heart className="text-[#EFA896] fill-[#EFA896]" size={20} />
                 Doing one thing is enough.
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-
-      </div>
-    </div>
+    </Layout>
   );
 };

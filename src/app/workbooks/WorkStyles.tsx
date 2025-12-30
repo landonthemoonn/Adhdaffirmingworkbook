@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Check, Info } from 'lucide-react';
 import { workStyles, WorkStyle } from '../data/work-styles';
 import { clsx } from 'clsx';
+import { Layout } from '../components/Layout';
 
 interface WorkStylesWorksheetProps {
   onBack: () => void;
@@ -19,50 +20,53 @@ export const WorkStylesWorksheet: React.FC<WorkStylesWorksheetProps> = ({ onBack
     );
   };
 
+  // Clay-themed color variants
   const getThemeClasses = (theme: WorkStyle['colorTheme'], isSelected: boolean) => {
-    switch (theme) {
-      case 'blue':
-        return isSelected 
-          ? "bg-blue-50 border-blue-200 ring-1 ring-blue-200" 
-          : "bg-white border-stone-100 hover:border-blue-100 hover:bg-blue-50/30";
-      case 'rose':
-        return isSelected 
-          ? "bg-rose-50 border-rose-200 ring-1 ring-rose-200" 
-          : "bg-white border-stone-100 hover:border-rose-100 hover:bg-rose-50/30";
-      case 'amber':
-        return isSelected 
-          ? "bg-amber-50 border-amber-200 ring-1 ring-amber-200" 
-          : "bg-white border-stone-100 hover:border-amber-100 hover:bg-amber-50/30";
-      case 'emerald':
-        return isSelected 
-          ? "bg-emerald-50 border-emerald-200 ring-1 ring-emerald-200" 
-          : "bg-white border-stone-100 hover:border-emerald-100 hover:bg-emerald-50/30";
+    const baseClasses = "transition-all duration-300 relative overflow-hidden";
+    
+    // Selected = "Pressed/Inset" look or "Highlighted Clay"
+    if (isSelected) {
+        return clsx(
+            baseClasses,
+            "bg-[#F3EBE6]/60 border border-white/40 shadow-none opacity-90"
+        );
     }
+    
+    // Default = Floating Clay
+    return clsx(
+        baseClasses,
+        "bg-[#FDF9F7] border border-white/60 shadow-[8px_8px_16px_rgba(166,133,119,0.08),-8px_-8px_16px_#FFFFFF] hover:shadow-[12px_12px_24px_rgba(166,133,119,0.12),-12px_-12px_24px_#FFFFFF] hover:translate-y-[-2px]"
+    );
   };
 
-  const getIconColors = (theme: WorkStyle['colorTheme']) => {
-    switch (theme) {
-      case 'blue': return "text-blue-500 bg-blue-100";
-      case 'rose': return "text-rose-500 bg-rose-100";
-      case 'amber': return "text-amber-500 bg-amber-100";
-      case 'emerald': return "text-emerald-500 bg-emerald-100";
-    }
+  const getIconContainerStyles = (theme: WorkStyle['colorTheme'], isSelected: boolean) => {
+      // Use distinct earth tones for identity, but keep soft
+      switch (theme) {
+        case 'blue': // Slate Blue
+            return isSelected ? "bg-[#E2E8F0] text-[#64748B]" : "bg-[#F1F5F9] text-[#94A3B8] shadow-[inset_2px_2px_5px_rgba(148,163,184,0.1),inset_-2px_-2px_5px_#FFFFFF]";
+        case 'rose': // Terracotta
+            return isSelected ? "bg-[#FFE4E1] text-[#EFA896]" : "bg-[#FFF1F2] text-[#EFA896] shadow-[inset_2px_2px_5px_rgba(239,168,150,0.1),inset_-2px_-2px_5px_#FFFFFF]";
+        case 'amber': // Ochre
+            return isSelected ? "bg-[#FEF3C7] text-[#D97706]" : "bg-[#FFFBEB] text-[#F59E0B] shadow-[inset_2px_2px_5px_rgba(245,158,11,0.1),inset_-2px_-2px_5px_#FFFFFF]";
+        case 'emerald': // Sage
+            return isSelected ? "bg-[#DCFCE7] text-[#166534]" : "bg-[#F0FDF4] text-[#4ADE80] shadow-[inset_2px_2px_5px_rgba(74,222,128,0.1),inset_-2px_-2px_5px_#FFFFFF]";
+        default:
+            return "bg-[#F3EBE6] text-[#9C7A70]";
+      }
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] text-stone-800 font-sans selection:bg-stone-200">
-      <div className="max-w-6xl mx-auto px-6 py-12 md:py-20">
-        
+    <Layout>
         {/* Navigation */}
         <div className="mb-8">
            <button 
              onClick={onBack}
-             className="flex items-center gap-2 text-stone-400 hover:text-stone-600 transition-colors group"
+             className="flex items-center gap-3 text-[#9C7A70] hover:text-[#5C3A3A] transition-colors group"
            >
-             <div className="p-2 rounded-full bg-stone-100 group-hover:bg-stone-200 transition-colors">
+             <div className="p-3 rounded-full bg-[#EEE6E1] shadow-[4px_4px_8px_rgba(166,133,119,0.1),-4px_-4px_8px_#FFFFFF] group-hover:shadow-[inset_2px_2px_4px_rgba(166,133,119,0.1),inset_-2px_-2px_4px_#FFFFFF] transition-all">
                <ArrowLeft size={20} />
              </div>
-             <span className="font-medium">Back to Dashboard</span>
+             <span className="font-bold tracking-wide uppercase text-xs">Back to Dashboard</span>
            </button>
         </div>
 
@@ -73,10 +77,10 @@ export const WorkStylesWorksheet: React.FC<WorkStylesWorksheetProps> = ({ onBack
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-stone-800 mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-[#5C3A3A] mb-6">
               How Your Brain Likes to Work
             </h1>
-            <p className="text-lg text-stone-500 leading-relaxed max-w-xl mx-auto">
+            <p className="text-lg text-[#9C7A70] leading-relaxed max-w-xl mx-auto font-medium">
               There is no "correct" way to be productive. <br/>
               Explore these styles with curiosity, not judgment. You might relate to one, or all of them.
             </p>
@@ -97,44 +101,45 @@ export const WorkStylesWorksheet: React.FC<WorkStylesWorksheetProps> = ({ onBack
                 transition={{ delay: idx * 0.1 }}
                 onClick={() => toggleStyle(style.id)}
                 className={clsx(
-                  "relative p-8 rounded-3xl border-2 transition-all duration-300 cursor-pointer group",
-                  getThemeClasses(style.colorTheme, isSelected),
-                  isSelected ? "shadow-sm" : "shadow-[0_4px_20px_rgb(0,0,0,0.02)]"
+                  "relative p-8 rounded-[2.5rem] cursor-pointer group",
+                  getThemeClasses(style.colorTheme, isSelected)
                 )}
               >
                 {/* Selection Indicator */}
                 <div className={clsx(
-                  "absolute top-6 right-6 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300",
+                  "absolute top-8 right-8 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300",
                   isSelected 
-                    ? "border-transparent bg-stone-800 text-white scale-100" 
-                    : "border-stone-200 text-transparent scale-90 group-hover:border-stone-300"
+                    ? "bg-[#5C3A3A] text-white shadow-inner scale-100" 
+                    : "bg-[#F3EBE6] text-transparent shadow-[inset_2px_2px_4px_rgba(166,133,119,0.1)] scale-90 group-hover:shadow-none group-hover:bg-[#EBE0DA]"
                 )}>
                   <Check size={16} strokeWidth={3} />
                 </div>
 
                 {/* Header Section */}
-                <div className="flex items-center gap-4 mb-6">
-                  <div className={clsx("p-3 rounded-2xl transition-colors", getIconColors(style.colorTheme))}>
-                    <Icon size={28} strokeWidth={2} />
+                <div className="flex items-center gap-5 mb-6">
+                  <div className={clsx("p-4 rounded-2xl transition-colors", getIconContainerStyles(style.colorTheme, isSelected))}>
+                    <Icon size={28} strokeWidth={2.5} />
                   </div>
-                  <h3 className="text-2xl font-bold text-stone-800">{style.title}</h3>
+                  <h3 className={clsx("text-2xl font-bold transition-colors", isSelected ? "text-[#8A6A60]" : "text-[#5C3A3A]")}>
+                    {style.title}
+                  </h3>
                 </div>
 
-                <p className="text-stone-600 font-medium leading-relaxed mb-8 pr-8">
+                <p className={clsx("font-medium leading-relaxed mb-8 pr-8 text-base", isSelected ? "text-[#9C7A70]" : "text-[#8A6A60]")}>
                   {style.description}
                 </p>
 
                 {/* Details Grid */}
                 <div className="grid grid-cols-1 gap-8">
                   <div>
-                    <h4 className="flex items-center gap-2 text-sm font-bold text-stone-400 uppercase tracking-wider mb-3">
-                      <span className="w-1.5 h-1.5 rounded-full bg-stone-400" />
+                    <h4 className="flex items-center gap-2 text-xs font-bold text-[#BFA69C] uppercase tracking-widest mb-3">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#BFA69C]" />
                       Works best when...
                     </h4>
-                    <ul className="space-y-2">
+                    <ul className="space-y-3">
                       {style.worksBest.map((item, i) => (
-                        <li key={i} className="text-stone-600 text-sm leading-relaxed flex items-start gap-2">
-                          <span>•</span>
+                        <li key={i} className={clsx("text-sm leading-relaxed flex items-start gap-2.5 font-medium", isSelected ? "text-[#9C7A70]/80" : "text-[#9C7A70]")}>
+                          <span className="text-[#EFA896]">•</span>
                           {item}
                         </li>
                       ))}
@@ -142,14 +147,14 @@ export const WorkStylesWorksheet: React.FC<WorkStylesWorksheetProps> = ({ onBack
                   </div>
 
                   <div>
-                    <h4 className="flex items-center gap-2 text-sm font-bold text-stone-400 uppercase tracking-wider mb-3">
-                       <span className="w-1.5 h-1.5 rounded-full bg-stone-400" />
+                    <h4 className="flex items-center gap-2 text-xs font-bold text-[#BFA69C] uppercase tracking-widest mb-3">
+                       <span className="w-1.5 h-1.5 rounded-full bg-[#BFA69C]" />
                        Helpful Supports
                     </h4>
-                    <ul className="space-y-2">
+                    <ul className="space-y-3">
                       {style.supports.map((item, i) => (
-                        <li key={i} className="text-stone-600 text-sm leading-relaxed flex items-start gap-2">
-                          <span>•</span>
+                        <li key={i} className={clsx("text-sm leading-relaxed flex items-start gap-2.5 font-medium", isSelected ? "text-[#9C7A70]/80" : "text-[#9C7A70]")}>
+                          <span className="text-[#EFA896]">•</span>
                           {item}
                         </li>
                       ))}
@@ -164,13 +169,11 @@ export const WorkStylesWorksheet: React.FC<WorkStylesWorksheetProps> = ({ onBack
 
         {/* Footer Note */}
         <div className="mt-16 text-center">
-           <p className="inline-flex items-center gap-2 text-stone-400 text-sm bg-stone-100 px-4 py-2 rounded-full">
-             <Info size={16} />
+           <p className="inline-flex items-center gap-3 text-[#9C7A70] text-sm font-bold bg-[#F3EBE6]/60 px-6 py-3 rounded-full border border-white/40">
+             <Info size={18} className="text-[#EFA896]" />
              <span>It is common to switch between styles depending on the day or task.</span>
            </p>
         </div>
-
-      </div>
-    </div>
+    </Layout>
   );
 };

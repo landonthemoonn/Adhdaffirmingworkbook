@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Check, Anchor, Wind, Droplets, CloudSun } from 'lucide-react';
 import { weatherStates, stormSignals, regulationOptions, reflectionPrompts, WeatherState } from '../data/emotional-weather';
 import { clsx } from 'clsx';
+import { Layout } from '../components/Layout';
 
 interface EmotionalWeatherProps {
   onBack: () => void;
@@ -13,7 +14,6 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
   const [selectedSignals, setSelectedSignals] = useState<string[]>([]);
   const [selectedRegulations, setSelectedRegulations] = useState<string[]>([]);
   
-  // Refs for scrolling to new sections
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
   const section4Ref = useRef<HTMLDivElement>(null);
@@ -37,28 +37,20 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
     );
   };
 
-  // Scroll to section 3 once signals are interacted with (after a brief delay or manually?)
-  // The prompt says "Gentle affirmation appears when any are selected". 
-  // It doesn't strictly say it auto-scrolls, but for flow, let's keep it manual or subtle.
-  // I'll just reveal the next sections as they go.
-
   return (
-    <div className={clsx(
-      "min-h-screen transition-colors duration-1000 ease-in-out font-sans selection:bg-indigo-100",
-      currentWeather ? `bg-gradient-to-br ${currentWeather.gradient}` : "bg-[#F4F6F8]"
-    )}>
-      <div className="max-w-4xl mx-auto px-6 py-12 md:py-20">
+    <Layout>
+      <div className="max-w-4xl mx-auto">
         
         {/* Navigation */}
         <div className="mb-12">
            <button 
              onClick={onBack}
-             className="flex items-center gap-2 text-slate-500 hover:text-slate-700 transition-colors group"
+             className="flex items-center gap-3 text-[#9C7A70] hover:text-[#5C3A3A] transition-colors group"
            >
-             <div className="p-2 rounded-full bg-white/50 group-hover:bg-white/80 transition-colors backdrop-blur-sm">
+             <div className="p-3 rounded-full bg-[#EEE6E1] shadow-[4px_4px_8px_rgba(166,133,119,0.1),-4px_-4px_8px_#FFFFFF] group-hover:shadow-[inset_2px_2px_4px_rgba(166,133,119,0.1),inset_-2px_-2px_4px_#FFFFFF] transition-all">
                <ArrowLeft size={20} />
              </div>
-             <span className="font-medium">Back to Dashboard</span>
+             <span className="font-bold tracking-wide uppercase text-xs">Back to Dashboard</span>
            </button>
         </div>
 
@@ -69,27 +61,27 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center justify-center p-3 mb-6 rounded-full bg-indigo-100/50 text-indigo-800 backdrop-blur-sm">
-              <Wind size={24} />
+            <div className="inline-flex items-center justify-center p-5 mb-6 rounded-full bg-[#F3EBE6] text-[#EFA896] shadow-[inset_3px_3px_6px_rgba(166,133,119,0.1),inset_-3px_-3px_6px_#FFFFFF]">
+              <Wind size={28} strokeWidth={2.5} />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-800 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-[#5C3A3A] mb-4">
               Emotional Weather
             </h1>
-            <p className="text-lg text-slate-500 max-w-lg mx-auto leading-relaxed">
+            <p className="text-lg text-[#9C7A70] max-w-lg mx-auto leading-relaxed font-medium">
               Identifying and riding out the waves of rejection sensitivity.
               <br />
-              <span className="text-sm opacity-75">This is information, not a command.</span>
+              <span className="text-sm opacity-80 font-normal">This is information, not a command.</span>
             </p>
           </motion.div>
         </header>
 
         {/* SECTION 1: FORECAST */}
         <section className="mb-24">
-          <h2 className="text-2xl font-semibold text-slate-700 mb-8 text-center">
+          <h2 className="text-2xl font-bold text-[#8A6A60] mb-8 text-center">
             What’s the emotional weather right now?
           </h2>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-8">
             {weatherStates.map((weather) => {
               const Icon = weather.icon;
               const isSelected = currentWeather?.id === weather.id;
@@ -99,29 +91,29 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
                   key={weather.id}
                   onClick={() => handleWeatherSelect(weather)}
                   className={clsx(
-                    "relative p-6 rounded-2xl text-left transition-all duration-300 group overflow-hidden",
+                    "relative p-6 rounded-[2rem] text-left transition-all duration-300 group overflow-hidden flex flex-col h-full",
                     isSelected 
-                      ? "bg-white ring-2 ring-indigo-300 shadow-md scale-[1.02]" 
-                      : "bg-white/60 hover:bg-white/90 hover:scale-[1.01] shadow-sm"
+                      ? "bg-[#F3EBE6]/80 shadow-inner opacity-100 ring-2 ring-[#EFA896]/30" 
+                      : "bg-[#FDF9F7] border border-white/60 shadow-[6px_6px_12px_rgba(166,133,119,0.08),-6px_-6px_12px_#FFFFFF] hover:shadow-[8px_8px_16px_rgba(166,133,119,0.1),-8px_-8px_16px_#FFFFFF] hover:translate-y-[-2px]"
                   )}
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <Icon className={clsx(
                       "transition-colors",
-                      isSelected ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-600"
-                    )} size={24} />
-                    <span className="font-bold text-slate-700">{weather.label}</span>
+                      isSelected ? "text-[#5C3A3A]" : "text-[#C9B6AD] group-hover:text-[#9C7A70]"
+                    )} size={26} strokeWidth={2.5} />
+                    <span className={clsx("font-bold text-lg", isSelected ? "text-[#5C3A3A]" : "text-[#8A6A60]")}>{weather.label}</span>
                   </div>
                   
                   {isSelected && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
-                      className="text-sm text-slate-600"
+                      className="text-sm text-[#9C7A70] mt-2"
                     >
-                      <p className="mb-2 font-medium">{weather.description}</p>
-                      <p className="italic text-slate-500 mb-2">{weather.thoughts}</p>
-                      <div className="inline-block px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs font-semibold">
+                      <p className="mb-3 font-medium leading-relaxed">{weather.description}</p>
+                      <p className="italic text-[#BFA69C] mb-4 text-xs">{weather.thoughts}</p>
+                      <div className="inline-block px-3 py-1.5 bg-[#EFA896]/10 text-[#EFA896] rounded-lg text-xs font-bold uppercase tracking-wide">
                         {weather.reminder}
                       </div>
                     </motion.div>
@@ -143,25 +135,27 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
               className="mb-24"
             >
               <div className="max-w-3xl mx-auto">
-                <h2 className="text-2xl font-semibold text-slate-700 mb-8 text-center">
+                <h2 className="text-2xl font-bold text-[#8A6A60] mb-8 text-center">
                   What signals tell me I’m getting overwhelmed?
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 bg-white/50 backdrop-blur-md rounded-3xl p-8 border border-white/50 shadow-sm">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 bg-[#F3EBE6]/40 backdrop-blur-sm rounded-[2.5rem] p-8 md:p-10 border border-white/40 shadow-inner">
                   
                   {/* Body Signals */}
                   <div>
-                    <h3 className="flex items-center gap-2 font-bold text-slate-400 uppercase tracking-wider text-sm mb-4">
-                      <Anchor size={16} /> Body Signals
+                    <h3 className="flex items-center gap-2 font-bold text-[#BFA69C] uppercase tracking-widest text-xs mb-6">
+                      <Anchor size={14} /> Body Signals
                     </h3>
                     <div className="space-y-3">
                       {stormSignals.body.map((signal, idx) => (
-                        <label key={`body-${idx}`} className="flex items-start gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white/50 transition-colors">
+                        <label key={`body-${idx}`} className="flex items-start gap-4 cursor-pointer group p-3 rounded-xl hover:bg-white/40 transition-colors">
                           <div className={clsx(
-                            "mt-1 w-5 h-5 rounded border transition-colors flex items-center justify-center flex-shrink-0",
-                            selectedSignals.includes(signal) ? "bg-slate-700 border-slate-700" : "border-slate-300 group-hover:border-slate-400"
+                            "mt-0.5 w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-all",
+                            selectedSignals.includes(signal) 
+                              ? "bg-[#5C3A3A] text-white shadow-inner" 
+                              : "bg-[#F9F3EF] border border-[#D6CFC7] shadow-sm group-hover:border-[#BFA69C]"
                           )}>
-                            {selectedSignals.includes(signal) && <Check size={12} className="text-white" strokeWidth={3} />}
+                            {selectedSignals.includes(signal) && <Check size={12} strokeWidth={4} />}
                           </div>
                           <input 
                             type="checkbox" 
@@ -169,7 +163,7 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
                             checked={selectedSignals.includes(signal)}
                             onChange={() => toggleSignal(signal)}
                           />
-                          <span className={clsx("text-slate-700 transition-colors", selectedSignals.includes(signal) && "font-medium")}>
+                          <span className={clsx("text-base transition-colors", selectedSignals.includes(signal) ? "text-[#5C3A3A] font-bold" : "text-[#8A6A60]")}>
                             {signal}
                           </span>
                         </label>
@@ -179,17 +173,19 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
 
                   {/* Thought Patterns */}
                   <div>
-                    <h3 className="flex items-center gap-2 font-bold text-slate-400 uppercase tracking-wider text-sm mb-4">
-                      <Wind size={16} /> Thought Patterns
+                    <h3 className="flex items-center gap-2 font-bold text-[#BFA69C] uppercase tracking-widest text-xs mb-6">
+                      <Wind size={14} /> Thought Patterns
                     </h3>
                     <div className="space-y-3">
                       {stormSignals.thoughts.map((signal, idx) => (
-                        <label key={`thought-${idx}`} className="flex items-start gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white/50 transition-colors">
+                        <label key={`thought-${idx}`} className="flex items-start gap-4 cursor-pointer group p-3 rounded-xl hover:bg-white/40 transition-colors">
                           <div className={clsx(
-                            "mt-1 w-5 h-5 rounded border transition-colors flex items-center justify-center flex-shrink-0",
-                            selectedSignals.includes(signal) ? "bg-slate-700 border-slate-700" : "border-slate-300 group-hover:border-slate-400"
+                            "mt-0.5 w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-all",
+                            selectedSignals.includes(signal) 
+                              ? "bg-[#5C3A3A] text-white shadow-inner" 
+                              : "bg-[#F9F3EF] border border-[#D6CFC7] shadow-sm group-hover:border-[#BFA69C]"
                           )}>
-                            {selectedSignals.includes(signal) && <Check size={12} className="text-white" strokeWidth={3} />}
+                            {selectedSignals.includes(signal) && <Check size={12} strokeWidth={4} />}
                           </div>
                           <input 
                             type="checkbox" 
@@ -197,7 +193,7 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
                             checked={selectedSignals.includes(signal)}
                             onChange={() => toggleSignal(signal)}
                           />
-                          <span className={clsx("text-slate-700 transition-colors", selectedSignals.includes(signal) && "font-medium")}>
+                          <span className={clsx("text-base transition-colors", selectedSignals.includes(signal) ? "text-[#5C3A3A] font-bold" : "text-[#8A6A60]")}>
                             {signal}
                           </span>
                         </label>
@@ -207,14 +203,14 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
                 </div>
 
                 {/* Validation Message */}
-                <div className="h-16 mt-6 flex justify-center items-center">
+                <div className="h-20 mt-8 flex justify-center items-center">
                   <AnimatePresence>
                     {selectedSignals.length > 0 && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="bg-indigo-100/80 text-indigo-900 px-6 py-3 rounded-full font-medium shadow-sm backdrop-blur-sm"
+                        className="bg-[#EFA896]/20 text-[#5C3A3A] px-8 py-4 rounded-full font-bold shadow-sm backdrop-blur-sm"
                       >
                         You’re noticing early. That matters.
                       </motion.div>
@@ -237,11 +233,11 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
               className="mb-24"
             >
               <div className="max-w-2xl mx-auto">
-                <h2 className="text-2xl font-semibold text-slate-700 mb-8 text-center">
+                <h2 className="text-2xl font-bold text-[#8A6A60] mb-8 text-center">
                   What helps me stay with this without reacting?
                 </h2>
 
-                <div className="space-y-4">
+                <div className="space-y-5">
                   {regulationOptions.map((option) => {
                     const isSelected = selectedRegulations.includes(option.id);
                     return (
@@ -249,25 +245,25 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
                         key={option.id}
                         onClick={() => toggleRegulation(option.id)}
                         className={clsx(
-                          "cursor-pointer group p-6 rounded-2xl border transition-all duration-300 relative overflow-hidden",
+                          "cursor-pointer group p-6 rounded-[2rem] transition-all duration-300 relative overflow-hidden",
                           isSelected 
-                            ? "bg-white border-indigo-200 shadow-md" 
-                            : "bg-white/40 border-transparent hover:bg-white/70"
+                            ? "bg-[#FDF9F7] border border-[#EFA896]/50 shadow-inner" 
+                            : "bg-[#FDF9F7] border border-white/60 shadow-[6px_6px_12px_rgba(166,133,119,0.06),-6px_-6px_12px_#FFFFFF] hover:shadow-[8px_8px_16px_rgba(166,133,119,0.08),-8px_-8px_16px_#FFFFFF] hover:translate-y-[-2px]"
                         )}
                       >
-                        {isSelected && <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-400" />}
+                        {isSelected && <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#EFA896]" />}
                         
-                        <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-bold text-slate-800 text-lg">{option.title}</h3>
-                          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-1 rounded">
+                        <div className="flex justify-between items-start mb-2 pl-2">
+                          <h3 className="font-bold text-[#5C3A3A] text-lg">{option.title}</h3>
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-[#BFA69C] bg-[#F3EBE6] px-3 py-1 rounded-full shadow-inner">
                             {option.duration}
                           </span>
                         </div>
                         
-                        <p className="text-slate-600 mb-3">{option.description}</p>
+                        <p className="text-[#8A6A60] mb-4 pl-2 leading-relaxed">{option.description}</p>
                         
-                        <div className="flex items-center gap-2 text-sm text-indigo-600/80 font-medium">
-                          <Droplets size={14} />
+                        <div className="flex items-center gap-2 text-sm text-[#EFA896] font-bold pl-2">
+                          <Droplets size={16} />
                           {option.benefit}
                         </div>
                       </div>
@@ -290,27 +286,27 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
               className="mb-16"
             >
               <div className="max-w-3xl mx-auto">
-                <h2 className="text-2xl font-semibold text-slate-700 mb-8 text-center flex items-center justify-center gap-2">
-                  <CloudSun size={28} className="text-amber-500/80" />
+                <h2 className="text-2xl font-bold text-[#8A6A60] mb-8 text-center flex items-center justify-center gap-3">
+                  <CloudSun size={32} className="text-[#EFA896]" />
                   After the intensity passes...
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {reflectionPrompts.map((prompt, idx) => (
-                    <div key={idx} className="bg-white/60 p-6 rounded-2xl border border-white/60">
-                      <label className="block text-slate-700 font-medium mb-3">
+                    <div key={idx} className="bg-[#F3EBE6]/40 p-6 rounded-[2rem] border border-white/40 shadow-inner">
+                      <label className="block text-[#8A6A60] font-bold mb-4 text-sm uppercase tracking-wide">
                         {prompt}
                       </label>
                       <textarea 
-                        className="w-full bg-white/50 border border-slate-200 rounded-xl p-3 text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-200 resize-none h-32"
+                        className="w-full bg-[#FDF9F7] border border-white/60 rounded-2xl p-4 text-[#5C3A3A] focus:outline-none focus:ring-2 focus:ring-[#EFA896]/20 resize-none h-40 shadow-inner placeholder-[#C9B6AD]"
                         placeholder="..."
                       />
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-12 text-center">
-                  <p className="inline-block text-slate-500 font-medium italic opacity-80">
+                <div className="mt-16 text-center">
+                  <p className="inline-block text-[#BFA69C] font-medium italic">
                     “This feeling is information, not a command.”
                   </p>
                 </div>
@@ -320,6 +316,6 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
         </AnimatePresence>
 
       </div>
-    </div>
+    </Layout>
   );
 };
