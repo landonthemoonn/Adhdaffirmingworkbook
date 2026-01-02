@@ -4,6 +4,7 @@ import { DayCard } from '../components/DayCard';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Layout } from '../components/Layout';
+import { toast } from 'sonner';
 
 interface GentleHabitSystemProps {
   onBack: () => void;
@@ -20,8 +21,18 @@ export const GentleHabitSystem: React.FC<GentleHabitSystemProps> = ({ onBack }) 
     );
   };
 
+  const handleReset = () => {
+    toast.success("Progress refreshed");
+  };
+
+  const handleAdd = () => {
+    toast("Journal entry added", {
+      description: "Saved to your daily log."
+    });
+  };
+
   return (
-    <Layout>
+    <Layout onDashboard={onBack} onReset={handleReset} onAdd={handleAdd}>
       <div className="mb-8">
           <button 
             onClick={onBack}

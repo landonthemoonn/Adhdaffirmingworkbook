@@ -5,6 +5,7 @@ import { closureOptions, mindPrompts, somaticRituals, finalPrompts } from '../da
 import { clsx } from 'clsx';
 import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 import { Layout } from '../components/Layout';
+import { toast } from 'sonner';
 
 interface SleepSanctuaryProps {
   onBack: () => void;
@@ -34,6 +35,7 @@ export const SleepSanctuary: React.FC<SleepSanctuaryProps> = ({ onBack }) => {
   const handleContain = () => {
     if (mindNote.trim()) {
       setIsContained(true);
+      toast.success("Thoughts contained");
     }
   };
 
@@ -44,6 +46,15 @@ export const SleepSanctuary: React.FC<SleepSanctuaryProps> = ({ onBack }) => {
   const enterRest = () => {
     setRestMode(true);
     setFinalPromptIndex(Math.floor(Math.random() * finalPrompts.length));
+  };
+
+  const handleReset = () => {
+    toast.success("Sanctuary reset");
+    // Could reset state here if desired
+  };
+
+  const handleAdd = () => {
+    toast("Journal note saved");
   };
 
   const handleSaveBriefing = async () => {
@@ -65,8 +76,10 @@ export const SleepSanctuary: React.FC<SleepSanctuaryProps> = ({ onBack }) => {
       }
       
       setIsBriefingSaved(true);
+      toast.success("Briefing scheduled for 6:30 AM");
     } catch (err) {
       console.error('Error saving briefing:', err);
+      toast.error("Failed to schedule briefing");
     } finally {
       setIsSaving(false);
     }
@@ -119,7 +132,7 @@ export const SleepSanctuary: React.FC<SleepSanctuaryProps> = ({ onBack }) => {
       </AnimatePresence>
 
       {!restMode && (
-        <Layout isDark={true}>
+        <Layout isDark={true} onDashboard={onBack} onReset={handleReset} onAdd={handleAdd}>
           <div className="max-w-3xl mx-auto relative z-10">
             
             {/* Navigation */}

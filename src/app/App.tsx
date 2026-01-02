@@ -8,38 +8,59 @@ import { SleepSanctuary } from './workbooks/SleepSanctuary';
 import { WorkbookCard } from './components/WorkbookCard';
 import { Layout } from './components/Layout';
 import { Sparkles, Home, Brain, Cloud, Moon, Heart } from 'lucide-react';
+import { toast, Toaster } from 'sonner';
 
 type View = 'dashboard' | 'gentle-habit' | 'home-reset' | 'work-styles' | 'daily-care' | 'emotional-weather' | 'sleep-sanctuary';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<View>('dashboard');
 
+  const goToDashboard = () => setCurrentView('dashboard');
+
+  // Simple handler to "reset" or reload the current view
+  const handleReset = () => {
+    // In a real app, this might reset state. For now, we'll just show a toast.
+    toast.success("Section refreshed");
+  };
+
+  const handleAdd = () => {
+    toast("New entry created", {
+      description: "This feature will be available soon."
+    });
+  };
+
   if (currentView === 'gentle-habit') {
-    return <GentleHabitSystem onBack={() => setCurrentView('dashboard')} />;
+    return <GentleHabitSystem onBack={goToDashboard} />;
   }
 
   if (currentView === 'home-reset') {
-    return <HomeReset onBack={() => setCurrentView('dashboard')} />;
+    return <HomeReset onBack={goToDashboard} />;
   }
 
   if (currentView === 'work-styles') {
-    return <WorkStylesWorksheet onBack={() => setCurrentView('dashboard')} />;
+    return <WorkStylesWorksheet onBack={goToDashboard} />;
   }
 
   if (currentView === 'daily-care') {
-    return <DailyCare onBack={() => setCurrentView('dashboard')} />;
+    return <DailyCare onBack={goToDashboard} />;
   }
 
   if (currentView === 'emotional-weather') {
-    return <EmotionalWeather onBack={() => setCurrentView('dashboard')} />;
+    return <EmotionalWeather onBack={goToDashboard} />;
   }
 
   if (currentView === 'sleep-sanctuary') {
-    return <SleepSanctuary onBack={() => setCurrentView('dashboard')} />;
+    return <SleepSanctuary onBack={goToDashboard} />;
   }
 
   return (
-    <Layout>
+    <Layout 
+        onDashboard={goToDashboard} 
+        onReset={handleReset} 
+        onAdd={handleAdd}
+    >
+      <Toaster position="top-center" />
+      
       {/* Header Section */}
       <header className="mb-14 flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="flex flex-col items-center md:items-start">
@@ -55,21 +76,6 @@ export default function App() {
             <p className="text-[#9C7A70] text-base font-medium tracking-wide">
             Your safe executive function space.
             </p>
-        </div>
-
-        {/* Decorative Physical Controls */}
-        <div className="hidden md:flex items-center gap-5 p-3 rounded-full bg-[#EEE6E1]/50 border border-white/40 shadow-sm">
-            <div className="flex gap-3">
-                {[1, 2, 3].map((i) => (
-                    <div key={i} className="w-12 h-12 rounded-full bg-[#F3EBE6] shadow-[4px_4px_10px_rgba(180,160,150,0.2),-4px_-4px_10px_rgba(255,255,255,0.8)] flex items-center justify-center text-[#BFA69C] transition-transform hover:scale-95 cursor-pointer active:shadow-[inset_2px_2px_5px_rgba(180,160,150,0.2)]">
-                        <div className="w-3 h-3 rounded-full bg-[#DDBEA9]" />
-                    </div>
-                ))}
-            </div>
-            <div className="h-8 w-px bg-[#D6CFC7]" />
-            <div className="w-12 h-12 rounded-full bg-[#EFA896] shadow-[4px_4px_10px_rgba(239,168,150,0.4),inset_2px_2px_4px_rgba(255,255,255,0.4)] flex items-center justify-center text-white">
-                <span className="text-xl font-bold">+</span>
-            </div>
         </div>
       </header>
 

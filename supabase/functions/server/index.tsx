@@ -44,4 +44,30 @@ app.post("/make-server-3dfdce46/briefing", async (c) => {
   }
 });
 
+app.post("/make-server-3dfdce46/inbox", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { content } = body;
+    
+    if (!content) {
+      return c.json({ error: "Content is required" }, 400);
+    }
+
+    const id = crypto.randomUUID();
+    const key = `inbox:${id}`;
+    
+    await kv.set(key, { 
+      id,
+      content,
+      createdAt: new Date().toISOString(),
+      status: 'new' 
+    });
+    
+    return c.json({ success: true, id });
+  } catch (error) {
+    console.log(error);
+    return c.json({ error: error.message }, 500);
+  }
+});
+
 Deno.serve(app.fetch);

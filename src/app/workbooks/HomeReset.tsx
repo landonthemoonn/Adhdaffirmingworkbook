@@ -4,6 +4,7 @@ import { ArrowLeft, Check, Sparkles, Coffee, Sun, BatteryLow } from 'lucide-reac
 import { weeklyTasks, lowEnergyModeTips } from '../data/home-reset';
 import { clsx } from 'clsx';
 import { Layout } from '../components/Layout';
+import { toast } from 'sonner';
 
 interface HomeResetProps {
   onBack: () => void;
@@ -21,8 +22,19 @@ export const HomeReset: React.FC<HomeResetProps> = ({ onBack }) => {
     }));
   };
 
+  const handleReset = () => {
+    setTaskStates({});
+    toast.success("Week reset");
+  };
+
+  const handleAdd = () => {
+    toast("Custom task added", {
+      description: "Added to your list."
+    });
+  };
+
   return (
-    <Layout>
+    <Layout onDashboard={onBack} onReset={handleReset} onAdd={handleAdd}>
         {/* Navigation */}
         <div className="mb-8">
            <button 

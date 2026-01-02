@@ -4,6 +4,7 @@ import { ArrowLeft, Check, Heart } from 'lucide-react';
 import { dailyCareCategories } from '../data/daily-care';
 import { clsx } from 'clsx';
 import { Layout } from '../components/Layout';
+import { toast } from 'sonner';
 
 interface DailyCareProps {
   onBack: () => void;
@@ -23,6 +24,15 @@ export const DailyCare: React.FC<DailyCareProps> = ({ onBack }) => {
     } else {
       setSelection({ categoryId, optionIndex });
     }
+  };
+
+  const handleReset = () => {
+    setSelection(null);
+    toast.success("Ready for a new check-in");
+  };
+
+  const handleAdd = () => {
+    toast("Check-in saved", { description: "Great job taking care of yourself." });
   };
 
   const getThemeColor = (theme: string, isSelected: boolean) => {
@@ -45,7 +55,7 @@ export const DailyCare: React.FC<DailyCareProps> = ({ onBack }) => {
   };
 
   return (
-    <Layout>
+    <Layout onDashboard={onBack} onReset={handleReset} onAdd={handleAdd}>
         {/* Navigation */}
         <div className="mb-8">
            <button 

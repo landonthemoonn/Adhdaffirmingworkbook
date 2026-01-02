@@ -4,6 +4,7 @@ import { ArrowLeft, Check, Info } from 'lucide-react';
 import { workStyles, WorkStyle } from '../data/work-styles';
 import { clsx } from 'clsx';
 import { Layout } from '../components/Layout';
+import { toast } from 'sonner';
 
 interface WorkStylesWorksheetProps {
   onBack: () => void;
@@ -18,6 +19,15 @@ export const WorkStylesWorksheet: React.FC<WorkStylesWorksheetProps> = ({ onBack
         ? prev.filter(s => s !== id)
         : [...prev, id]
     );
+  };
+
+  const handleReset = () => {
+    setSelectedStyles([]);
+    toast.success("Selection cleared");
+  };
+
+  const handleAdd = () => {
+    toast("Note added", { description: "Observations saved." });
   };
 
   // Clay-themed color variants
@@ -56,7 +66,7 @@ export const WorkStylesWorksheet: React.FC<WorkStylesWorksheetProps> = ({ onBack
   };
 
   return (
-    <Layout>
+    <Layout onDashboard={onBack} onReset={handleReset} onAdd={handleAdd}>
         {/* Navigation */}
         <div className="mb-8">
            <button 

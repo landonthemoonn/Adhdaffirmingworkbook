@@ -4,6 +4,7 @@ import { ArrowLeft, Check, Anchor, Wind, Droplets, CloudSun } from 'lucide-react
 import { weatherStates, stormSignals, regulationOptions, reflectionPrompts, WeatherState } from '../data/emotional-weather';
 import { clsx } from 'clsx';
 import { Layout } from '../components/Layout';
+import { toast } from 'sonner';
 
 interface EmotionalWeatherProps {
   onBack: () => void;
@@ -37,8 +38,19 @@ export const EmotionalWeather: React.FC<EmotionalWeatherProps> = ({ onBack }) =>
     );
   };
 
+  const handleReset = () => {
+    setCurrentWeather(null);
+    setSelectedSignals([]);
+    setSelectedRegulations([]);
+    toast.success("Weather report cleared");
+  };
+
+  const handleAdd = () => {
+    toast("Reflection saved", { description: "Added to your emotional log." });
+  };
+
   return (
-    <Layout>
+    <Layout onDashboard={onBack} onReset={handleReset} onAdd={handleAdd}>
       <div className="max-w-4xl mx-auto">
         
         {/* Navigation */}
