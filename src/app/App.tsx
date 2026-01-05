@@ -5,52 +5,50 @@ import { WorkStylesWorksheet } from './workbooks/WorkStyles';
 import { DailyCare } from './workbooks/DailyCare';
 import { EmotionalWeather } from './workbooks/EmotionalWeather';
 import { SleepSanctuary } from './workbooks/SleepSanctuary';
+import { NervousSystem } from './workbooks/NervousSystem';
+import { TaskInitiation } from './workbooks/TaskInitiation';
+import { ShameDetox } from './workbooks/ShameDetox';
+import { EnergyMapping } from './workbooks/EnergyMapping';
+
 import { WorkbookCard } from './components/WorkbookCard';
 import { Layout } from './components/Layout';
-import { Sparkles, Home, Brain, Cloud, Moon, Heart } from 'lucide-react';
+import { Sparkles, Home, Brain, Cloud, Moon, Heart, Wind, Zap, ShieldCheck, PlayCircle } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 
-type View = 'dashboard' | 'gentle-habit' | 'home-reset' | 'work-styles' | 'daily-care' | 'emotional-weather' | 'sleep-sanctuary';
+type View = 
+  | 'dashboard' 
+  | 'gentle-habit' 
+  | 'home-reset' 
+  | 'work-styles' 
+  | 'daily-care' 
+  | 'emotional-weather' 
+  | 'sleep-sanctuary'
+  | 'nervous-system'
+  | 'task-initiation'
+  | 'shame-detox'
+  | 'energy-mapping';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<View>('dashboard');
 
   const goToDashboard = () => setCurrentView('dashboard');
+  
+  // These are handled within Layout/Modal now, but kept for interface compatibility
+  const handleReset = () => toast.success("Section refreshed");
+  const handleAdd = () => toast("New entry created");
 
-  // Simple handler to "reset" or reload the current view
-  const handleReset = () => {
-    // In a real app, this might reset state. For now, we'll just show a toast.
-    toast.success("Section refreshed");
-  };
-
-  const handleAdd = () => {
-    toast("New entry created", {
-      description: "This feature will be available soon."
-    });
-  };
-
-  if (currentView === 'gentle-habit') {
-    return <GentleHabitSystem onBack={goToDashboard} />;
-  }
-
-  if (currentView === 'home-reset') {
-    return <HomeReset onBack={goToDashboard} />;
-  }
-
-  if (currentView === 'work-styles') {
-    return <WorkStylesWorksheet onBack={goToDashboard} />;
-  }
-
-  if (currentView === 'daily-care') {
-    return <DailyCare onBack={goToDashboard} />;
-  }
-
-  if (currentView === 'emotional-weather') {
-    return <EmotionalWeather onBack={goToDashboard} />;
-  }
-
-  if (currentView === 'sleep-sanctuary') {
-    return <SleepSanctuary onBack={goToDashboard} />;
+  // Router Switch
+  switch (currentView) {
+    case 'gentle-habit': return <GentleHabitSystem onBack={goToDashboard} />;
+    case 'home-reset': return <HomeReset onBack={goToDashboard} />;
+    case 'work-styles': return <WorkStylesWorksheet onBack={goToDashboard} />;
+    case 'daily-care': return <DailyCare onBack={goToDashboard} />;
+    case 'emotional-weather': return <EmotionalWeather onBack={goToDashboard} />;
+    case 'sleep-sanctuary': return <SleepSanctuary onBack={goToDashboard} />;
+    case 'nervous-system': return <NervousSystem onBack={goToDashboard} />;
+    case 'task-initiation': return <TaskInitiation onBack={goToDashboard} />;
+    case 'shame-detox': return <ShameDetox onBack={goToDashboard} />;
+    case 'energy-mapping': return <EnergyMapping onBack={goToDashboard} />;
   }
 
   return (
@@ -79,61 +77,118 @@ export default function App() {
         </div>
       </header>
 
-      {/* Grid of Workbooks */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <WorkbookCard
-            index={0}
-            title="Gentle Habit System"
-            description="A 20-day support system prioritizing emotional safety over hustle."
-            icon={Sparkles}
-            status="active"
-            onClick={() => setCurrentView('gentle-habit')}
-        />
+      <div className="space-y-16">
         
-        <WorkbookCard
-            index={1}
-            title="Home Reset"
-            description="A low-pressure weekly maintenance system. Resets over cleanliness."
-            icon={Home}
-            status="active"
-            onClick={() => setCurrentView('home-reset')}
-        />
-
+        {/* Core Regulation & Safety */}
+        <section>
+          <div className="flex items-center gap-4 mb-8">
+            <h2 className="text-lg font-bold text-[#8A6A60] uppercase tracking-widest">Core Regulation & Safety</h2>
+            <div className="h-[1px] bg-[#D6CFC7] flex-grow" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <WorkbookCard
-            index={2}
-            title="Work Styles"
-            description="Recognize your preferred working style without judgment."
-            icon={Brain}
-            status="active"
-            onClick={() => setCurrentView('work-styles')}
-        />
+                index={0}
+                title="Emotional Weather"
+                description="Identifying and riding out the waves of rejection sensitivity."
+                icon={Cloud}
+                status="active"
+                onClick={() => setCurrentView('emotional-weather')}
+            />
+            <WorkbookCard
+                index={1}
+                title="Nervous System Reset"
+                description="Micro-regulation tools for when everything feels too loud."
+                icon={Wind}
+                status="new"
+                onClick={() => setCurrentView('nervous-system')}
+            />
+            <WorkbookCard
+                index={2}
+                title="Shame Detox"
+                description="Name and reframe the internalized narratives holding you back."
+                icon={ShieldCheck}
+                status="new"
+                onClick={() => setCurrentView('shame-detox')}
+            />
+          </div>
+        </section>
 
-        <WorkbookCard
-            index={3}
-            title="Daily Care"
-            description="A flexible check-in system. You only need one."
-            icon={Heart}
-            status="active"
-            onClick={() => setCurrentView('daily-care')}
-        />
+        {/* Executive Function */}
+        <section>
+          <div className="flex items-center gap-4 mb-8">
+            <h2 className="text-lg font-bold text-[#8A6A60] uppercase tracking-widest">Executive Function</h2>
+            <div className="h-[1px] bg-[#D6CFC7] flex-grow" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <WorkbookCard
+                index={3}
+                title="Gentle Habit System"
+                description="A 20-day support system prioritizing emotional safety over hustle."
+                icon={Sparkles}
+                status="active"
+                onClick={() => setCurrentView('gentle-habit')}
+            />
+            <WorkbookCard
+                index={4}
+                title="Home Reset"
+                description="Low-pressure weekly maintenance. Resets over cleanliness."
+                icon={Home}
+                status="active"
+                onClick={() => setCurrentView('home-reset')}
+            />
+            <WorkbookCard
+                index={5}
+                title="Work Styles"
+                description="Recognize your preferred working style without judgment."
+                icon={Brain}
+                status="active"
+                onClick={() => setCurrentView('work-styles')}
+            />
+            <WorkbookCard
+                index={6}
+                title="Task Initiation Lab"
+                description="Start-only rituals and dopamine pairing to break paralysis."
+                icon={PlayCircle}
+                status="new"
+                onClick={() => setCurrentView('task-initiation')}
+            />
+          </div>
+        </section>
 
-        <WorkbookCard
-            index={4}
-            title="Emotional Weather"
-            description="Identifying and riding out the waves of rejection sensitivity."
-            icon={Cloud}
-            status="active"
-            onClick={() => setCurrentView('emotional-weather')}
-        />
+        {/* Body & Brain Care */}
+        <section>
+          <div className="flex items-center gap-4 mb-8">
+            <h2 className="text-lg font-bold text-[#8A6A60] uppercase tracking-widest">Body & Brain Care</h2>
+            <div className="h-[1px] bg-[#D6CFC7] flex-grow" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <WorkbookCard
+                index={7}
+                title="Daily Care"
+                description="A flexible check-in system. You only need one."
+                icon={Heart}
+                status="active"
+                onClick={() => setCurrentView('daily-care')}
+            />
+            <WorkbookCard
+                index={8}
+                title="Energy Mapping"
+                description="Track capacity, not productivity. Permission to rest."
+                icon={Zap}
+                status="new"
+                onClick={() => setCurrentView('energy-mapping')}
+            />
+            <WorkbookCard
+                index={9}
+                title="Sleep Sanctuary"
+                description="Rituals to transition from high-alert to rest mode."
+                icon={Moon}
+                status="active"
+                onClick={() => setCurrentView('sleep-sanctuary')}
+            />
+          </div>
+        </section>
 
-        <WorkbookCard
-            index={5}
-            title="Sleep Sanctuary"
-            description="Rituals to transition from high-alert to rest mode."
-            icon={Moon}
-            status="active"
-            onClick={() => setCurrentView('sleep-sanctuary')}
-        />
       </div>
     </Layout>
   );
