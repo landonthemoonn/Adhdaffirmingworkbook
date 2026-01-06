@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send, PenLine } from 'lucide-react';
 import { clsx } from 'clsx';
-import { projectId, publicAnonKey } from '../../../utils/supabase/info';
 import { toast } from 'sonner';
 
 interface QuickAddModalProps {
@@ -20,18 +19,16 @@ export const QuickAddModal: React.FC<QuickAddModalProps> = ({ isOpen, onClose, i
     
     setIsSaving(true);
     try {
-      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-3dfdce46/inbox`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`
-        },
-        body: JSON.stringify({ content })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save to inbox');
-      }
+      // Save to localStorage for now (no backend required)
+      const inboxItems = JSON.parse(localStorage.getItem('adhdkit_inbox') || '[]');
+      const newItem = {
+        id: crypto.randomUUID(),
+        content,
+        createdAt: new Date().toISOString(),
+        status: 'new'
+      };
+      inboxItems.unshift(newItem);
+      localStorage.setItem('adhdkit_inbox', JSON.stringify(inboxItems));
       
       toast.success("Saved to Inbox");
       setContent('');

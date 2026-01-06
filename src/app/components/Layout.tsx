@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { clsx } from 'clsx';
-import { LayoutGrid, RefreshCw, Plus } from 'lucide-react';
+import { LayoutGrid, RefreshCw, Plus, Printer } from 'lucide-react';
 import { QuickAddModal } from './QuickAddModal';
 
 interface LayoutProps {
@@ -10,6 +10,7 @@ interface LayoutProps {
   onDashboard?: () => void;
   onReset?: () => void;
   onAdd?: () => void; // Keeping for compatibility, but will be overridden by default Quick Add
+  onPrint?: () => void;
 }
 
 export const Layout: React.FC<LayoutProps> = ({ 
@@ -17,9 +18,18 @@ export const Layout: React.FC<LayoutProps> = ({
   isDark = false,
   onDashboard,
   onReset,
-  onAdd 
+  onAdd,
+  onPrint
 }) => {
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
+
+  const handlePrint = () => {
+    if (onPrint) {
+      onPrint();
+    } else {
+      window.print();
+    }
+  };
 
   return (
     <div className={clsx(
@@ -122,10 +132,18 @@ export const Layout: React.FC<LayoutProps> = ({
                  isDark={isDark}
                />
                
+               {/* Button 3: Print */}
+               <NavButton 
+                 icon={Printer} 
+                 onClick={handlePrint} 
+                 label="Print" 
+                 isDark={isDark}
+               />
+               
                {/* Divider */}
                <div className={clsx("w-px h-6 my-auto", isDark ? "bg-white/10" : "bg-[#D6CFC7]")} />
                
-               {/* Button 3: Add (Primary) */}
+               {/* Button 4: Add (Primary) */}
                <NavButton 
                  icon={Plus} 
                  onClick={() => setIsQuickAddOpen(true)} 

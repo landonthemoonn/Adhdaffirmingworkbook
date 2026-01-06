@@ -179,3 +179,100 @@
     line-height: 1.5;
   }
 }
+
+/* Print Styles */
+@media print {
+  /* Hide interactive elements when printing */
+  button,
+  .hidden-print {
+    display: none !important;
+  }
+
+  /* Remove backgrounds and shadows for clean printing */
+  body,
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Remove animations */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Optimize page layout */
+  @page {
+    margin: 0.5in;
+  }
+
+  /* Ensure proper page breaks */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Avoid breaking inside important containers */
+  section,
+  article,
+  .print-avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* Remove rounded corners for cleaner print */
+  * {
+    border-radius: 0 !important;
+  }
+
+  /* Make links visible */
+  a {
+    text-decoration: underline;
+  }
+
+  /* Display URLs after links if needed */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  /* But don't show URLs for internal navigation */
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  /* Ensure text is readable */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  /* Keep images sized appropriately */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+}
+
+/* 3D Card Flip Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}

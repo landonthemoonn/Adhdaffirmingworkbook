@@ -9,6 +9,7 @@ import { NervousSystem } from './workbooks/NervousSystem';
 import { TaskInitiation } from './workbooks/TaskInitiation';
 import { ShameDetox } from './workbooks/ShameDetox';
 import { EnergyMapping } from './workbooks/EnergyMapping';
+import { PrintView } from './workbooks/PrintView';
 
 import { WorkbookCard } from './components/WorkbookCard';
 import { Layout } from './components/Layout';
@@ -26,12 +27,14 @@ type View =
   | 'nervous-system'
   | 'task-initiation'
   | 'shame-detox'
-  | 'energy-mapping';
+  | 'energy-mapping'
+  | 'print-view';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<View>('dashboard');
 
   const goToDashboard = () => setCurrentView('dashboard');
+  const goToPrintView = () => setCurrentView('print-view');
   
   // These are handled within Layout/Modal now, but kept for interface compatibility
   const handleReset = () => toast.success("Section refreshed");
@@ -49,6 +52,7 @@ export default function App() {
     case 'task-initiation': return <TaskInitiation onBack={goToDashboard} />;
     case 'shame-detox': return <ShameDetox onBack={goToDashboard} />;
     case 'energy-mapping': return <EnergyMapping onBack={goToDashboard} />;
+    case 'print-view': return <PrintView onBack={goToDashboard} />;
   }
 
   return (
@@ -56,6 +60,7 @@ export default function App() {
         onDashboard={goToDashboard} 
         onReset={handleReset} 
         onAdd={handleAdd}
+        onPrint={goToPrintView}
     >
       <Toaster position="top-center" />
       
