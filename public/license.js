@@ -7,16 +7,19 @@ const LICENSE_KEY = 'adhdkit_license';
 // Check if we already have a valid license
 async function checkExistingLicense() {
     const storedLicense = localStorage.getItem(LICENSE_KEY);
-    
+
     if (storedLicense) {
         // Verify it's still valid
         const isValid = await verifyLicense(storedLicense);
         if (isValid) {
+            // Update last verified timestamp
+            localStorage.setItem('adhdkit_last_verified', Date.now().toString());
             // Redirect to main app
             window.location.href = 'index.html';
         } else {
             // Invalid/expired, clear it
             localStorage.removeItem(LICENSE_KEY);
+            localStorage.removeItem('adhdkit_last_verified');
         }
     }
 }
@@ -76,10 +79,11 @@ document.getElementById('licenseForm').addEventListener('submit', async (e) => {
     if (isValid) {
         // Save to localStorage
         localStorage.setItem(LICENSE_KEY, licenseKey);
-        
+        localStorage.setItem('adhdkit_last_verified', Date.now().toString());
+
         // Show success message
         showMessage('✓ License verified! Redirecting...', 'success');
-        
+
         // Redirect after short delay
         setTimeout(() => {
             window.location.href = 'index.html';
