@@ -73,6 +73,7 @@ struct GentleHabitSystemView: View {
                                         } else {
                                             noticedDays.remove(day.day)
                                         }
+                                        persistence.saveNoticedDays(noticedDays)
                                     }
                                 )
                             )
@@ -101,6 +102,9 @@ struct GentleHabitSystemView: View {
                 .padding(.horizontal, 20)
                 .padding(.vertical, 48)
             }
+        }
+        .onAppear {
+            noticedDays = persistence.getNoticedDays()
         }
     }
 }
