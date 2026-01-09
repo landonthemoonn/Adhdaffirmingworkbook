@@ -2,6 +2,7 @@ import SwiftUI
 
 struct GentleHabitSystemView: View {
     let onBack: () -> Void
+    @StateObject private var persistence = PersistenceManager.shared
     @State private var noticedDays: Set<Int> = []
     
     var body: some View {
