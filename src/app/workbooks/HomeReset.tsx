@@ -170,10 +170,10 @@ export const HomeReset: React.FC<HomeResetProps> = ({ onBack }) => {
                   <button
                     onClick={() => toggleStatus(item.day, 'done')}
                     className={clsx(
-                      "flex-1 py-3 px-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-200",
+                      "flex-1 py-3 px-4 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-200",
                       isDone
-                        ? "bg-[#E6F4EA] shadow-inner text-emerald-700"
-                        : "bg-[#F3EBE6] text-[#9C7A70] shadow-[4px_4px_8px_rgba(166,133,119,0.1),-4px_-4px_8px_#FFFFFF] hover:shadow-inner hover:bg-[#E6F4EA] hover:text-emerald-700"
+                        ? "bg-[#E6F4EA] shadow-inner text-emerald-700 border-2 border-emerald-200"
+                        : "bg-[#F3EBE6] text-[#5C3A3A] border-2 border-[#E8DDD6] shadow-[4px_4px_8px_rgba(166,133,119,0.1),-4px_-4px_8px_#FFFFFF] hover:shadow-inner hover:bg-[#E6F4EA] hover:text-emerald-700 hover:border-emerald-200"
                     )}
                   >
                     Done
@@ -181,10 +181,10 @@ export const HomeReset: React.FC<HomeResetProps> = ({ onBack }) => {
                   <button
                     onClick={() => toggleStatus(item.day, 'good-enough')}
                     className={clsx(
-                      "flex-1 py-3 px-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-200",
+                      "flex-1 py-3 px-4 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-200",
                       isGoodEnough
-                        ? "bg-[#FFF4E6] shadow-inner text-amber-700"
-                        : "bg-[#F3EBE6] text-[#9C7A70] shadow-[4px_4px_8px_rgba(166,133,119,0.1),-4px_-4px_8px_#FFFFFF] hover:shadow-inner hover:bg-[#FFF4E6] hover:text-amber-700"
+                        ? "bg-[#FFF4E6] shadow-inner text-amber-700 border-2 border-amber-200"
+                        : "bg-[#F3EBE6] text-[#5C3A3A] border-2 border-[#E8DDD6] shadow-[4px_4px_8px_rgba(166,133,119,0.1),-4px_-4px_8px_#FFFFFF] hover:shadow-inner hover:bg-[#FFF4E6] hover:text-amber-700 hover:border-amber-200"
                     )}
                   >
                     Good Enough
