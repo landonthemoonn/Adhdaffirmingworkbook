@@ -34,10 +34,21 @@ If you need to change it:
 
 ### 3. Test the License System
 
+**Using the Test Page (Recommended):**
+1. Visit `test-license.html` in your browser (e.g., `http://localhost:5173/test-license.html` or `https://yoursite.com/test-license.html`)
+2. First, test API connectivity using the "Test Gumroad API" button
+3. If API is reachable, make a test purchase of your Gumroad product
+4. Copy the license key from your confirmation email
+5. Paste it in the "Test License Key" section and click "Test License"
+6. The test page will show you detailed information about what's happening
+
+**Manual Testing:**
 1. Make a test purchase of your Gumroad product
 2. Copy the license key from your confirmation email
-3. Visit your site and enter the license key
-4. Verify you can access the content
+3. Visit your site at `license.html`
+4. Enter the license key
+5. Open browser console (F12) to see detailed logs
+6. Verify you can access the content
 
 ### 4. Important Notes
 
@@ -57,9 +68,10 @@ If you need to change it:
 
 ## Files Involved
 
-- **check-license.js** - Runs on app load, verifies existing licenses
-- **license.html** - License key entry page UI
-- **license.js** - Handles license verification and form submission
+- **public/check-license.js** - Runs on app load, verifies existing licenses
+- **public/license.html** - License key entry page UI
+- **public/license.js** - Handles license verification and form submission
+- **public/test-license.html** - Diagnostic tool for testing licensing setup
 - **index.html** - Main app entry point, includes check-license.js
 
 ## Customization
@@ -92,16 +104,57 @@ Make sure this email is set up to handle customer support inquiries about licens
 
 ## Troubleshooting
 
+### Step 1: Use the Test Page
+Visit `test-license.html` to diagnose issues. This page provides:
+- API connectivity testing
+- Detailed error messages from Gumroad
+- Storage inspection
+- Product ID configuration
+
+### Common Issues
+
 **"Invalid license key" error:**
-- Verify the product ID matches your Gumroad product
-- Check that license key generation is enabled in Gumroad
-- Ensure the customer copied the full license key
+1. **Check Product ID**: Make sure the Product ID in the code matches your Gumroad product
+   - Open browser console and look for `Verifying license with Product ID:`
+   - Compare it to your product ID in Gumroad dashboard
+   - Update both `public/license.js` and `public/check-license.js` if needed
+2. **License generation not enabled**:
+   - Go to your Gumroad product settings
+   - Scroll to "License keys" section
+   - Enable "Generate license keys for customers"
+3. **Incomplete license key**: Ensure the full key was copied (no spaces or missing characters)
 
 **License verification fails:**
-- Check browser console for API errors
-- Verify Gumroad API is accessible (not blocked by firewall/adblocker)
-- Test the Gumroad API directly: https://api.gumroad.com/v2/licenses/verify
+1. **Check API connectivity**: Use the test page's "Test Gumroad API" button
+2. **Browser console errors**: Open DevTools (F12) and check the Console tab for detailed error messages
+3. **CORS issues**: The current implementation uses URL-encoded format to avoid CORS. If you see CORS errors:
+   - Make sure you're using `Content-Type: application/x-www-form-urlencoded`
+   - Verify you're using `URLSearchParams` (already implemented)
+4. **Ad blockers**: Some ad blockers may interfere with API calls. Try disabling temporarily.
+
+**Wrong Product ID:**
+If your Product ID is not `E80jP2nNTqprQeyJMK4BT~A==`:
+1. Find your correct Product ID in Gumroad dashboard (usually under product permalink)
+2. Update it in:
+   - `public/license.js` line 4: `const PRODUCT_ID = 'your-id-here';`
+   - `public/check-license.js` line 4: `const PRODUCT_ID = 'your-id-here';`
+3. Rebuild the app: `npm run build`
 
 **Users can't access after clearing browser data:**
 - This is expected behavior - they need to re-enter their license key
 - The key is verified with Gumroad, so it will work again
+
+### Debugging Steps
+
+1. **Test API First**: Use `test-license.html` to verify Gumroad API is reachable
+2. **Check Console Logs**: The license verification logs detailed info to browser console
+3. **Verify Product Setup**: Make sure license key generation is enabled in Gumroad
+4. **Test with Real Key**: Make a test purchase and use the real license key
+5. **Check Product ID Match**: Ensure your code uses the correct Product ID from Gumroad
+
+### Getting Your Gumroad Product ID
+
+1. Log into your Gumroad account
+2. Go to your product page
+3. The Product ID is in the product's permalink/URL or in the API settings
+4. It usually looks like: `xxxxxxxxxxxx==` (base64 encoded string)

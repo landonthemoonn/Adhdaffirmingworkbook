@@ -10,8 +10,8 @@ async function checkExistingLicense() {
 
     if (storedLicense) {
         // Verify it's still valid
-        const isValid = await verifyLicense(storedLicense);
-        if (isValid) {
+        const result = await verifyLicense(storedLicense);
+        if (result.valid) {
             // Update last verified timestamp
             localStorage.setItem('adhdkit_last_verified', Date.now().toString());
             // Redirect to main app
@@ -20,6 +20,7 @@ async function checkExistingLicense() {
             // Invalid/expired, clear it
             localStorage.removeItem(LICENSE_KEY);
             localStorage.removeItem('adhdkit_last_verified');
+            console.log('Stored license is invalid:', result.message);
         }
     }
 }
@@ -27,6 +28,7 @@ async function checkExistingLicense() {
 // Verify license key with Gumroad
 async function verifyLicense(licenseKey) {
     try {
+        console.log('Verifying license with Product ID:', PRODUCT_ID);
         const response = await fetch('https://api.gumroad.com/v2/licenses/verify', {
             method: 'POST',
             headers: {
@@ -39,12 +41,17 @@ async function verifyLicense(licenseKey) {
         });
 
         const data = await response.json();
-        
+        console.log('Gumroad API Response:', data);
+
         // Gumroad returns success: true if valid
-        return data.success === true;
+        if (data.success === true) {
+            return { valid: true, data };
+        } else {
+            return { valid: false, message: data.message || 'Invalid license key', data };
+        }
     } catch (error) {
         console.error('License verification error:', error);
-        return false;
+        return { valid: false, message: `Network error: ${error.message}` };
     }
 }
 
@@ -74,9 +81,9 @@ document.getElementById('licenseForm').addEventListener('submit', async (e) => {
     document.getElementById('message').textContent = '';
     
     // Verify the license
-    const isValid = await verifyLicense(licenseKey);
-    
-    if (isValid) {
+    const result = await verifyLicense(licenseKey);
+
+    if (result.valid) {
         // Save to localStorage
         localStorage.setItem(LICENSE_KEY, licenseKey);
         localStorage.setItem('adhdkit_last_verified', Date.now().toString());
@@ -89,8 +96,9 @@ document.getElementById('licenseForm').addEventListener('submit', async (e) => {
             window.location.href = 'index.html';
         }, 1000);
     } else {
-        // Show error
-        showMessage('Invalid license key. Please check your email and try again.', 'error');
+        // Show error with specific message
+        const errorMsg = result.message || 'Invalid license key. Please check your email and try again.';
+        showMessage(`✗ ${errorMsg}\n\nTroubleshooting:\n• Make sure you copied the full license key\n• Check that license generation is enabled on Gumroad\n• Try the test page: test-license.html`, 'error');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Verify License';
     }
